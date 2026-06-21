@@ -32,7 +32,7 @@ export default function ResultsPreview({ results }) {
 
   return (
     <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-4">Analysis Results</h3>
+      <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-4"> Results</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {items.map((item) => (
           <div
@@ -46,7 +46,6 @@ export default function ResultsPreview({ results }) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-base">{item.emoji}</span>
                   <span className="text-xs font-medium text-secondary">{item.label}</span>
                 </div>
                 <h4 className="text-sm font-semibold text-primary mb-1">

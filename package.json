@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "set GEMINI_API_KEY=AIzaSyDfD1sSPtophVLz5jpyB-gdjWH2_xjA0K4 && cd server && node index.cjs",
+    "server": "cd server && node index.cjs",
     "client": "vite",
     "build": "vite build",
     "preview": "vite preview"

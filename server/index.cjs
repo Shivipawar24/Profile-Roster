@@ -11,15 +11,18 @@ app.use(express.json({ limit: '1mb' }));
 
 const analyzeCache = new Map();
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY);
+const geminiApiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 const groqApiKey = process.env.GROQ_API_KEY;
+const genAI = geminiApiKey
+  ? new GoogleGenerativeAI(geminiApiKey)
+  : null;
 const groq = groqApiKey && !groqApiKey.includes('your_') && !groqApiKey.includes('placeholder')
   ? new Groq({ apiKey: groqApiKey })
   : null;
 
 const PROVIDERS = [
-  { provider: 'gemini', model: 'gemini-2.5-flash', enabled: true },
   { provider: 'groq', model: 'llama-4-scout-17b-16e-instruct', enabled: !!groq },
+  { provider: 'gemini', model: 'gemini-2.5-flash', enabled: !!genAI },
 ];
 
 const DEFAULT_RESULT = {

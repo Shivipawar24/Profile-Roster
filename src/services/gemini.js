@@ -43,16 +43,7 @@ Do not use code blocks.
 Do not include any text before or after the JSON.
 Do not add explanations, introductions, or conclusions.
 Use emojis in the roast to make it more engaging.
-
-Return exactly this structure:
-{
-  "score": number,
-  "roast": "string",
-  "headline": "string",
-  "strengths": ["string"],
-  "missingSkills": ["string"],
-  "improvements": ["string"]
-}
+Use emojis naturally in the roast and headline. Do not overdo it.
 
 ${isUrl ? 'USER INPUT:' : 'Profile:'}
 ${profileText}
