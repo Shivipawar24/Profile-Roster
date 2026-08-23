@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import AnalyzerCard from './components/AnalyzerCard'
@@ -7,14 +8,16 @@ import Footer from './components/Footer'
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-surface">
-      <Navbar />
-      <main>
-        <Hero />
-        <AnalyzerCard />
-        <Features />
-      </main>
-      <Footer />
-    </div>
+    <BrowserRouter>
+      <div className="min-h-screen bg-surface">
+        <Navbar />
+        <main>
+          <Hero />
+          <AnalyzerCard />
+          <Features />
+        </main>
+        <Footer />
+      </div>
+    </BrowserRouter>
   )
 }
