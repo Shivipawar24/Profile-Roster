@@ -1,8 +1,8 @@
-export const analyzeProfileApi = async ({ profileText, name }) => {
+export const analyzeProfileApi = async ({ profileText, name, fileData }) => {
   const res = await fetch('/api/analyze', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ profileText, name }),
+    body: JSON.stringify({ profileText, name, fileData }),
   });
 
   if (!res.ok) {

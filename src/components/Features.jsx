@@ -1,34 +1,26 @@
 import React from 'react'
-import { Flame, TrendingUp, Lightbulb, Wrench, Zap } from 'lucide-react'
+import { Flame, TrendingUp, Lightbulb, Wrench } from 'lucide-react'
 
 const features = [
   {
     icon: Flame,
-    title: 'Honest Roast',
-    description: 'Get direct, unfiltered feedback on what\'s holding your profile back. No sugarcoating.',
-    stat: '92%',
-    statLabel: 'users improve after roast',
+    title: 'Honest AI Roast',
+    description: 'Get direct, witty, and unfiltered feedback on what\'s holding your resume or LinkedIn profile back.',
   },
   {
     icon: TrendingUp,
-    title: 'Profile Score',
-    description: 'Comprehensive scoring across visual appeal, content quality, keyword optimization, and completeness.',
-    stat: '4.8/5',
-    statLabel: 'average accuracy score',
+    title: 'ATS & Quality Score',
+    description: 'Comprehensive scoring based on formatting, keyword coverage, role relevance, and overall impact.',
   },
   {
     icon: Lightbulb,
-    title: 'Smart Suggestions',
-    description: 'AI-generated headline rewrites and about section improvements tailored to your industry.',
-    stat: '15+',
-    statLabel: 'suggestions per analysis',
+    title: 'Headline & Summary Fixes',
+    description: 'AI-generated headline rewrites and objective section improvements tailored to your target industry.',
   },
   {
     icon: Wrench,
-    title: 'Skill Gap Analysis',
-    description: 'Identify missing skills compared to top performers in your target roles.',
-    stat: '3.2x',
-    statLabel: 'faster skill discovery',
+    title: 'Missing Skills Analysis',
+    description: 'Identify high-demand technical and soft skills missing from your profile compared to recruiter standards.',
   },
 ]
 
@@ -41,7 +33,7 @@ export default function Features() {
             Everything you need to level up
           </h2>
           <p className="text-secondary max-w-xl mx-auto">
-            Stop guessing what recruiters want. Get data-driven insights powered by AI.
+            Stop guessing what recruiters want. Upload your PDF resume or paste your profile text for instant AI feedback.
           </p>
         </div>
 
@@ -56,11 +48,6 @@ export default function Features() {
                   <h3 className="text-lg font-semibold text-primary mb-2">{feature.title}</h3>
                   <p className="text-secondary text-sm leading-relaxed">{feature.description}</p>
                 </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-border flex items-center gap-2">
-                <Zap className="w-4 h-4 text-accent" />
-                <span className="text-lg font-bold text-primary">{feature.stat}</span>
-                <span className="text-xs text-secondary ml-1">{feature.statLabel}</span>
               </div>
             </div>
           ))}

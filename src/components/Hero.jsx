@@ -16,12 +16,12 @@ export default function Hero() {
         </h1>
         
         <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-          Analyze your LinkedIn profile and get honest feedback, profile scores, headline suggestions, and improvement tips.
+          Upload your Resume (PDF/Doc) or paste your profile text to get honest AI roasts, ATS scores, headline rewrites, and actionable feedback.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="#analyzer" className="btn-primary inline-flex items-center justify-center gap-2">
-            Analyze Profile
+            Roast My Resume / Profile
             <ChevronRight className="w-4 h-4" />
           </a>
         </div>

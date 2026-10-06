@@ -3,7 +3,7 @@ Return exactly this structure:
 {
   "score": number between 40 and 95,
   "roast": "string - witty but helpful critique with relevant emojis",
-  "headline": "string - better headline suggestion with relevant emojis",
+  "headline": "string - better headline or resume summary suggestion with relevant emojis",
   "strengths": ["string"],
   "missingSkills": ["string"],
   "improvements": ["string"]
@@ -11,13 +11,13 @@ Return exactly this structure:
 Use emojis naturally in the roast and headline. Do not overdo it.
 `;
 
-const PROMPT_TEXT_ANALYSIS = (text, name) => `You are an expert recruiter and LinkedIn coach.
+const PROMPT_TEXT_ANALYSIS = (text, name) => `You are a top-tier executive recruiter, ATS expert, and career strategist.
 
-Analyze this complete LinkedIn profile data: headline, summary/About, experience, education, and skills. Give specific, personalized feedback grounded ONLY in what is provided. If the user only pasted one section, say so and give advice based on what you can see.
-${name ? `The person's name is: ${name}` : ''}
+Analyze this complete Resume / LinkedIn profile data: headline/objective, summary, work experience, projects, skills, and education. Give specific, personalized feedback grounded ONLY in what is provided.
+${name ? `The candidate's name is: ${name}` : ''}
 ${name ? 'Address them by name in your roast.' : ''}
 
-Profile Data:
+Candidate Resume / Profile Data:
 ${text}
 
 ${PROMPT_JSON_SCORE()}`;
