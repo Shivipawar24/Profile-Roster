@@ -25,11 +25,11 @@ function checkRateLimit(ip) {
   const now = Date.now();
   const userHistory = rateLimitMap.get(ip) || [];
   const recentRequests = userHistory.filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS);
-  
+
   if (recentRequests.length >= RATE_LIMIT_MAX) {
     return false;
   }
-  
+
   recentRequests.push(now);
   rateLimitMap.set(ip, recentRequests);
   return true;

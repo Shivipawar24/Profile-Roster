@@ -147,7 +147,7 @@ export default function AnalyzerCard() {
         <div className="card">
           <div className="mb-5">
             <label className="block text-xs font-semibold text-secondary uppercase tracking-wider mb-2">
-              Candidate Name (Optional)
+              Your Name (Optional)
             </label>
             <input
               type="text"
@@ -181,7 +181,7 @@ export default function AnalyzerCard() {
               }`}
             >
               <FileText className="w-4 h-4" />
-              Paste Profile Text
+              Paste LinkedIn Profile / About
             </button>
           </div>
 
