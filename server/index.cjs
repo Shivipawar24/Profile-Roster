@@ -39,49 +39,75 @@ function checkRateLimit(ip) {
 function getCacheKey(content, name) {
   return crypto
     .createHash('sha256')
-    .update(`v2:${content}:${name || ''}`)
+    .update(`v4:${content}:${name || ''}`)
     .digest('hex');
 }
 
 function extractHeadlineAndPersona(text, name) {
   const displayName = name?.trim() || 'Professional';
-  const contentLower = (text || '').toLowerCase();
+  const rawText = (text || '').trim();
+  const contentLower = rawText.toLowerCase();
+
+  const firstLine = rawText.split('\n')[0]?.trim() || '';
 
   // Extract explicit title / company patterns if present (e.g., "CEO & Co-Founder at Savo Technologies")
-  const ceoMatch = text.match(/(CEO|Chief Executive Officer|Founder|Co-Founder|Managing Director|Vice President|VP|Director)\s*(?:&|and)?\s*(?:Co-Founder|Founder)?\s*(?:at|@|-)?\s*([A-Za-z0-9\s\.\,\-]+)/i);
-  const engineerMatch = text.match(/(Software Engineer|Frontend Engineer|Full Stack Developer|Backend Developer|Architect|Data Scientist|Product Manager)\s*(?:at|@|-)?\s*([A-Za-z0-9\s\.\,\-]+)/i);
+  const ceoMatch = rawText.match(/(CEO|Chief Executive Officer|Founder|Co-Founder|Managing Director|Vice President|VP|Director|Head of [A-Za-z]+)\s*(?:&|and)?\s*(?:Co-Founder|Founder)?\s*(?:at|@|-)?\s*([A-Za-z0-9\s\.\,\-]+)/i);
+  const engineerMatch = rawText.match(/(Software Engineer|Frontend Engineer|Full Stack Developer|Backend Developer|Architect|Data Scientist|Product Manager|Marketing Lead|UI\/UX Designer)\s*(?:at|@|-)?\s*([A-Za-z0-9\s\.\,\-]+)/i);
 
-  let currentRole = 'Industry Professional';
+  let currentRole = '';
 
   if (ceoMatch) {
-    currentRole = ceoMatch[0].trim().split('\n')[0].slice(0, 50);
+    currentRole = ceoMatch[0].trim().split('\n')[0].slice(0, 60);
   } else if (engineerMatch) {
-    currentRole = engineerMatch[0].trim().split('\n')[0].slice(0, 50);
+    currentRole = engineerMatch[0].trim().split('\n')[0].slice(0, 60);
+  } else if (firstLine.length > 5 && firstLine.length < 60 && !firstLine.toLowerCase().includes('http')) {
+    currentRole = firstLine;
   } else if (contentLower.includes('ceo') || contentLower.includes('founder') || contentLower.includes('co-founder')) {
-    currentRole = 'CEO & Founder';
+    currentRole = 'CEO & Co-Founder';
   } else if (contentLower.includes('director') || contentLower.includes('vp') || contentLower.includes('head of')) {
-    currentRole = 'Executive Leader';
-  } else if (contentLower.includes('react') || contentLower.includes('frontend') || contentLower.includes('javascript')) {
+    currentRole = 'Executive Business Leader';
+  } else if (contentLower.includes('react') || contentLower.includes('frontend') || contentLower.includes('javascript') || contentLower.includes('web')) {
     currentRole = 'Senior Frontend Engineer & React Specialist';
-  } else if (contentLower.includes('full stack') || contentLower.includes('node') || contentLower.includes('python')) {
+  } else if (contentLower.includes('full stack') || contentLower.includes('node') || contentLower.includes('express') || contentLower.includes('python')) {
     currentRole = 'Senior Full-Stack Software Engineer';
-  } else if (contentLower.includes('data') || contentLower.includes('analytics')) {
-    currentRole = 'Data & Analytics Strategist';
-  } else if (contentLower.includes('design') || contentLower.includes('ui') || contentLower.includes('ux')) {
+  } else if (contentLower.includes('data') || contentLower.includes('analytics') || contentLower.includes('sql')) {
+    currentRole = 'Data Science & Analytics Strategist';
+  } else if (contentLower.includes('design') || contentLower.includes('ui') || contentLower.includes('ux') || contentLower.includes('figma')) {
     currentRole = 'Product & UI/UX Design Leader';
+  } else if (contentLower.includes('marketing') || contentLower.includes('growth') || contentLower.includes('seo')) {
+    currentRole = 'Growth Marketing & Strategy Specialist';
+  } else {
+    const defaultRoles = [
+      'Senior Technology Consultant & Solutions Architect',
+      'Strategic Innovation Leader & Tech Specialist',
+      'Enterprise Systems Engineer & Product Strategist',
+      'Digital Transformation Lead & Solutions Architect'
+    ];
+    const nameHash = displayName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    currentRole = defaultRoles[nameHash % defaultRoles.length];
   }
 
-  let pillar2 = 'Driving Strategic Innovation & Scalable Business Impact';
-  let pillar3 = '10+ Years Delivering Enterprise-Grade Technology Solutions & Growth';
+  let pillar2 = 'Driving Strategic Digital Innovation & Product Excellence';
 
-  if (contentLower.includes('ai') || contentLower.includes('machine learning') || contentLower.includes('transformation')) {
-    pillar2 = 'Leading AI-Powered Digital Transformation & Innovation';
-  } else if (contentLower.includes('saas') || contentLower.includes('cloud') || contentLower.includes('aws')) {
-    pillar2 = 'Scaling Enterprise Cloud Infrastructure & High-Performance Architecture';
-  } else if (contentLower.includes('react') || contentLower.includes('web') || contentLower.includes('mobile')) {
-    pillar2 = 'Building Scalable Web Applications & Enterprise User Experiences';
-  } else if (contentLower.includes('growth') || contentLower.includes('marketing') || contentLower.includes('revenue')) {
+  if (contentLower.includes('ai') || contentLower.includes('machine learning') || contentLower.includes('llm') || contentLower.includes('transformation')) {
+    pillar2 = 'Leading AI-Powered Digital Transformation & Next-Gen Innovation';
+  } else if (contentLower.includes('saas') || contentLower.includes('cloud') || contentLower.includes('aws') || contentLower.includes('devops')) {
+    pillar2 = 'Scaling Enterprise Cloud Infrastructure & High-Performance SaaS Architecture';
+  } else if (contentLower.includes('react') || contentLower.includes('javascript') || contentLower.includes('next.js') || contentLower.includes('web')) {
+    pillar2 = 'Building High-Performance Web Applications & Modern Interactive UIs';
+  } else if (contentLower.includes('growth') || contentLower.includes('marketing') || contentLower.includes('revenue') || contentLower.includes('sales')) {
     pillar2 = 'Accelerating Customer Acquisition & Sustainable Business Growth';
+  } else if (contentLower.includes('mobile') || contentLower.includes('flutter') || contentLower.includes('react native') || contentLower.includes('android')) {
+    pillar2 = 'Architecting High-Scale Cross-Platform Mobile Applications';
+  }
+
+  let pillar3 = 'Delivering Enterprise-Grade Technology Solutions & Business Growth';
+
+  if (contentLower.includes('year') || contentLower.includes('exp')) {
+    const yrMatch = rawText.match(/(\d+\+?\s*years?)/i);
+    if (yrMatch) {
+      pillar3 = `${yrMatch[0]} Delivering High-Impact Enterprise Solutions`;
+    }
   }
 
   const isExecutive = currentRole.toLowerCase().includes('ceo') || currentRole.toLowerCase().includes('founder') || currentRole.toLowerCase().includes('director') || currentRole.toLowerCase().includes('vp') || currentRole.toLowerCase().includes('executive');
