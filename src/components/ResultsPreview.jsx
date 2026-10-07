@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flame, TrendingUp, Lightbulb, Wrench } from 'lucide-react'
+import { Flame, TrendingUp, Lightbulb, Wrench, ListChecks } from 'lucide-react'
 
 const cards = [
   { key: 'roast', label: 'Roast', emoji: '🔥', icon: Flame, color: 'text-orange-500', bgColor: 'bg-orange-50', fullWidth: true },
@@ -31,8 +31,9 @@ export default function ResultsPreview({ results }) {
   })
 
   return (
-    <div className="space-y-3">
-      <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-4"> Results</h3>
+    <div className="space-y-4">
+      <h3 className="text-sm font-semibold text-secondary uppercase tracking-wider mb-4">Results</h3>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {items.map((item) => (
           <div
@@ -51,7 +52,7 @@ export default function ResultsPreview({ results }) {
                 <h4 className="text-sm font-semibold text-primary mb-1">
                   {item.title}
                 </h4>
-                <p className="text-xs text-secondary leading-relaxed ">
+                <p className="text-xs text-secondary leading-relaxed">
                   {item.description}
                 </p>
               </div>
@@ -59,6 +60,38 @@ export default function ResultsPreview({ results }) {
           </div>
         ))}
       </div>
+
+      {/* Step-by-Step Improvement Suggestions Card */}
+      {results?.improvements && results.improvements.length > 0 && (
+        <div className="bg-white rounded-2xl border border-border p-5 hover:border-accent/30 hover:shadow-md transition-all duration-200">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+              <ListChecks className="w-5 h-5 text-indigo-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs font-medium text-secondary">Step-by-Step Improvements</span>
+              </div>
+              <h4 className="text-sm font-semibold text-primary mb-3">
+                Actionable Resume & Profile Fixes
+              </h4>
+
+              <div className="space-y-2.5">
+                {results.improvements.map((improvement, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 rounded-xl bg-surface/60 border border-border/50">
+                    <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                      {index + 1}
+                    </span>
+                    <p className="text-xs text-secondary leading-relaxed font-medium">
+                      {improvement}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

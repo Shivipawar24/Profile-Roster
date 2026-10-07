@@ -33,7 +33,7 @@ export default function Features() {
             Everything you need to level up
           </h2>
           <p className="text-secondary max-w-xl mx-auto">
-            Stop guessing what recruiters want. Upload your PDF resume or paste your profile text for instant AI feedback.
+            Upload your PDF resume or paste your profile text for instant AI feedback.
           </p>
         </div>
 

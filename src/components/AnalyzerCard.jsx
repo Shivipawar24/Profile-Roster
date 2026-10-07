@@ -29,7 +29,7 @@ export default function AnalyzerCard() {
 
     const validExtensions = ['.pdf', '.txt', '.docx', '.doc', '.md', '.rtf']
     const fileExt = '.' + file.name.split('.').pop().toLowerCase()
-    
+
     if (!validExtensions.includes(fileExt) && !file.type.includes('pdf') && !file.type.includes('text')) {
       showToast('error', 'Please upload a valid document (.pdf, .txt, .docx, .md)')
       return
@@ -163,22 +163,20 @@ export default function AnalyzerCard() {
           <div className="flex border-b border-border mb-6">
             <button
               onClick={() => setMode('file')}
-              className={`flex-1 pb-4 text-sm font-semibold transition-colors duration-200 border-b-2 -mb-px flex items-center justify-center gap-2 ${
-                mode === 'file'
+              className={`flex-1 pb-4 text-sm font-semibold transition-colors duration-200 border-b-2 -mb-px flex items-center justify-center gap-2 ${mode === 'file'
                   ? 'text-primary border-accent'
                   : 'text-secondary border-transparent hover:text-primary'
-              }`}
+                }`}
             >
               <UploadCloud className="w-4 h-4" />
               Upload Resume (PDF / Doc)
             </button>
             <button
               onClick={() => setMode('text')}
-              className={`flex-1 pb-4 text-sm font-semibold transition-colors duration-200 border-b-2 -mb-px flex items-center justify-center gap-2 ${
-                mode === 'text'
+              className={`flex-1 pb-4 text-sm font-semibold transition-colors duration-200 border-b-2 -mb-px flex items-center justify-center gap-2 ${mode === 'text'
                   ? 'text-primary border-accent'
                   : 'text-secondary border-transparent hover:text-primary'
-              }`}
+                }`}
             >
               <FileText className="w-4 h-4" />
               Paste LinkedIn Profile / About
@@ -197,11 +195,10 @@ export default function AnalyzerCard() {
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={handleFileDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${
-                    isDragging
+                  className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200 ${isDragging
                       ? 'border-accent bg-accent/10 shadow-lg scale-[1.01]'
                       : 'border-border hover:border-accent/60 hover:bg-surface/50'
-                  }`}
+                    }`}
                 >
                   <input
                     type="file"

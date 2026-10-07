@@ -39,32 +39,94 @@ function checkRateLimit(ip) {
 function getCacheKey(content, name) {
   return crypto
     .createHash('sha256')
-    .update(`${content}:${name || ''}`)
+    .update(`v2:${content}:${name || ''}`)
     .digest('hex');
 }
 
-function generateFallbackRoast(content, name) {
-  const displayName = name?.trim() || 'Candidate';
-  const score = Math.floor(Math.random() * 20) + 70; // 70 to 90
+function extractHeadlineAndPersona(text, name) {
+  const displayName = name?.trim() || 'Professional';
+  const contentLower = (text || '').toLowerCase();
+
+  // Extract explicit title / company patterns if present (e.g., "CEO & Co-Founder at Savo Technologies")
+  const ceoMatch = text.match(/(CEO|Chief Executive Officer|Founder|Co-Founder|Managing Director|Vice President|VP|Director)\s*(?:&|and)?\s*(?:Co-Founder|Founder)?\s*(?:at|@|-)?\s*([A-Za-z0-9\s\.\,\-]+)/i);
+  const engineerMatch = text.match(/(Software Engineer|Frontend Engineer|Full Stack Developer|Backend Developer|Architect|Data Scientist|Product Manager)\s*(?:at|@|-)?\s*([A-Za-z0-9\s\.\,\-]+)/i);
+
+  let currentRole = 'Industry Professional';
+
+  if (ceoMatch) {
+    currentRole = ceoMatch[0].trim().split('\n')[0].slice(0, 50);
+  } else if (engineerMatch) {
+    currentRole = engineerMatch[0].trim().split('\n')[0].slice(0, 50);
+  } else if (contentLower.includes('ceo') || contentLower.includes('founder') || contentLower.includes('co-founder')) {
+    currentRole = 'CEO & Founder';
+  } else if (contentLower.includes('director') || contentLower.includes('vp') || contentLower.includes('head of')) {
+    currentRole = 'Executive Leader';
+  } else if (contentLower.includes('react') || contentLower.includes('frontend') || contentLower.includes('javascript')) {
+    currentRole = 'Senior Frontend Engineer & React Specialist';
+  } else if (contentLower.includes('full stack') || contentLower.includes('node') || contentLower.includes('python')) {
+    currentRole = 'Senior Full-Stack Software Engineer';
+  } else if (contentLower.includes('data') || contentLower.includes('analytics')) {
+    currentRole = 'Data & Analytics Strategist';
+  } else if (contentLower.includes('design') || contentLower.includes('ui') || contentLower.includes('ux')) {
+    currentRole = 'Product & UI/UX Design Leader';
+  }
+
+  let pillar2 = 'Driving Strategic Innovation & Scalable Business Impact';
+  let pillar3 = '10+ Years Delivering Enterprise-Grade Technology Solutions & Growth';
+
+  if (contentLower.includes('ai') || contentLower.includes('machine learning') || contentLower.includes('transformation')) {
+    pillar2 = 'Leading AI-Powered Digital Transformation & Innovation';
+  } else if (contentLower.includes('saas') || contentLower.includes('cloud') || contentLower.includes('aws')) {
+    pillar2 = 'Scaling Enterprise Cloud Infrastructure & High-Performance Architecture';
+  } else if (contentLower.includes('react') || contentLower.includes('web') || contentLower.includes('mobile')) {
+    pillar2 = 'Building Scalable Web Applications & Enterprise User Experiences';
+  } else if (contentLower.includes('growth') || contentLower.includes('marketing') || contentLower.includes('revenue')) {
+    pillar2 = 'Accelerating Customer Acquisition & Sustainable Business Growth';
+  }
+
+  const isExecutive = currentRole.toLowerCase().includes('ceo') || currentRole.toLowerCase().includes('founder') || currentRole.toLowerCase().includes('director') || currentRole.toLowerCase().includes('vp') || currentRole.toLowerCase().includes('executive');
+
+  const headline = `${currentRole} | ${pillar2} | ${pillar3}`;
+
+  return {
+    displayName,
+    currentRole,
+    isExecutive,
+    headline,
+  };
+}
+
+function generateFallbackRoast(rawContent, name) {
+  const { displayName, currentRole, isExecutive, headline } = extractHeadlineAndPersona(rawContent, name);
+  const score = Math.floor(Math.random() * 20) + 68; // 68 to 88
+
+  let roastText = '';
+  if (isExecutive) {
+    roastText = `Well hello, ${displayName}... 👑 As a ${currentRole}, your profile carries significant weight, but right now it reads like an official annual corporate report. You're flexing high-level buzzwords without giving your target audience (investors, clients, and strategic partners) raw proof of numbers, revenue impact, or scaling metrics. Claiming 'visionary leadership' without hard data is like an engine running without fuel. Let's turn your experience into a magnet for high-value deals and industry authority! 🚀`;
+  } else {
+    roastText = `Oh boy, ${displayName}... 💀 Your profile reads like a generic corporate manual. As a ${currentRole}, you've listed your daily responsibilities, but industry leaders and prospective clients want to see measurable outcomes and high-impact deliverables! Claiming you're 'hardworking and result-driven' without proof is like a restaurant advertising food as 'edible'. Let's replace the corporate filler with real quantifiable impact so your audience takes notice immediately! ⚡`;
+  }
+
+  const targetAudience = isExecutive ? "Investors, High-Value Clients & Key Partners" : "Hiring Leaders, Clients & Industry Network";
 
   return {
     score,
-    roast: `Hey ${displayName}! 🔥 Your profile has a solid foundation, but right now it reads like a standard corporate manual. You list lots of responsibilities, but recruiters want to see measurable impact and outcome metrics! Time to cut the generic filler and highlight your real wins. 🚀`,
-    headline: `${displayName} | High-Impact Professional & Results-Driven Specialist 💡`,
+    roast: roastText,
+    headline: headline,
     strengths: [
-      "Solid domain foundation and clear career progression",
-      "Relevant technical terminology and industry background",
-      "Clean structure and readable experience layout"
+      `Strong professional positioning as ${currentRole}`,
+      `Clear domain foundation and active industry experience`,
+      `Structured experience timeline with visible core competencies`
     ],
     missingSkills: [
-      "Quantifiable metrics (e.g., '% increase', 'X revenue generated', 'users scaled')",
-      "ATS keyword alignment tailored for competitive job descriptions",
-      "Compelling executive summary hook at the top"
+      "Quantifiable Outcomes (e.g., '% revenue growth', '$ cost savings', 'users/clients scaled')",
+      `High-Authority Signals tailored for ${targetAudience}`,
+      "Compelling Executive Summary Hook (the first 2 lines visible before 'See More')"
     ],
     improvements: [
-      "Action-Oriented Bullets: Start every experience line with punchy action verbs (e.g., Spearheaded, Architected, Optimized).",
-      "Add Measurable Impact: Include at least 3 concrete numbers or performance percentages in your work history.",
-      "Executive Summary: Refine your summary to showcase your unique value proposition in 2-3 concise sentences."
+      "Quantify Every Milestone: Add hard metrics to your current role (e.g., 'Scaled revenue by 35%' or 'Led team of 15 to launch enterprise platform').",
+      "Cut Vague Corporate Jargon: Replace generic terms like 'hardworking leader' with tangible outcomes and specialized domain terms.",
+      "High-Impact 3-Part Headline: Update your headline to the formula above to command instant respect from your network."
     ]
   };
 }
@@ -91,7 +153,7 @@ async function callOpenRouter(prompt, apiKey) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'liquid/lfm-2.5-2.6b:free',
+      model: 'openrouter/free',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.7,
     }),
@@ -145,7 +207,7 @@ function getAIProviders() {
   return providers;
 }
 
-async function callAI(prompt, name = '', fileData = null, maxRetries = 1) {
+async function callAI(prompt, rawContent = '', name = '', fileData = null, maxRetries = 1) {
   const providers = getAIProviders();
   const errors = [];
 
@@ -195,7 +257,7 @@ async function callAI(prompt, name = '', fileData = null, maxRetries = 1) {
           }
 
           if (status === 429 && attempt < maxRetries) {
-            const delay = parseInt(err.raw?.error?.error_details?.[2]?.retryDelay || '5');
+            const delay = parseInt(err.raw?.error?.error_details?.[2]?.retryDelay || '15');
             console.warn(`${item.provider} rate limited, retrying in ${delay}s...`);
             await sleep(delay * 1000);
           } else {
@@ -208,7 +270,7 @@ async function callAI(prompt, name = '', fileData = null, maxRetries = 1) {
   }
 
   console.warn('AI providers rate-limited/unavailable. Utilizing Smart Fallback Engine:', errors);
-  return generateFallbackRoast(prompt, name);
+  return generateFallbackRoast(rawContent, name);
 }
 
 const handleAnalyzeRequest = async (req, res) => {
@@ -238,7 +300,7 @@ const handleAnalyzeRequest = async (req, res) => {
     try {
       parsed = JSON.parse(contentToAnalyze);
     } catch {
-      parsed = await callAI(PROMPT_TEXT_ANALYSIS(contentToAnalyze, name), name, fileData);
+      parsed = await callAI(PROMPT_TEXT_ANALYSIS(contentToAnalyze, name), contentToAnalyze, name, fileData);
     }
 
     analyzeCache.set(cacheKey, parsed);
@@ -252,7 +314,7 @@ const handleAnalyzeRequest = async (req, res) => {
     });
   } catch (err) {
     console.error('Analysis error:', err);
-    return res.json(generateFallbackRoast('', req.body.name));
+    return res.json(generateFallbackRoast(req.body.profileText, req.body.name));
   }
 };
 

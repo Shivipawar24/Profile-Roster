@@ -16,7 +16,7 @@ export default function Hero() {
         </h1>
         
         <p className="text-lg md:text-xl text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-          Upload your Resume (PDF/Doc) or paste your profile text to get honest AI roasts, ATS scores, headline rewrites, and actionable feedback.
+          Upload your Resume (PDF/Doc) or paste your Linkedin profile about to get honest AI roasts, ATS scores, headline rewrites, and actionable feedback.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
